@@ -1,3 +1,143 @@
+-- ============================================================
+-- DEFENSIVE SECURITY RESEARCH COPY
+-- Source: source(3).lua
+-- Original source lines preserved verbatim.
+-- This copy adds comments only; it does not implement a
+-- whitelist/license bypass or remove authorization checks.
+-- Total original lines: 17189
+-- ============================================================
+
+-- ============================================================
+-- SECURITY RESEARCH: Luraph runtime placeholder / VM boundary
+-- Original source lines: 1-4
+-- Purpose: identify the security-relevant boundary for study.
+-- Defensive note: authorization should be enforced server-side;
+-- client-side checks/obfuscation should not be treated as a trust boundary.
+-- ============================================================
+-- Luraph runtime function (from the VM object, not part of the script: not lifted).
+-- LPH_ENCFUNC decrypts a function this way: (key, encrypted buffer, ...) -> function.
+local function luraph_runtime1(...)
+	error("Luraph runtime function, not devirtualized")
+-- ============================================================
+-- END SECURITY RESEARCH: Luraph runtime placeholder / VM boundary
+-- Original source lines: 1-4 remain unchanged above.
+-- ============================================================
+end
+
+local v = table.pack(...)
+
+-- ============================================================
+-- SECURITY RESEARCH: Runtime / Loader validation
+-- Original source lines: 9-20
+-- Purpose: identify the security-relevant boundary for study.
+-- Defensive note: authorization should be enforced server-side;
+-- client-side checks/obfuscation should not be treated as a trust boundary.
+-- ============================================================
+if not ce_like_loadstring_fn then
+	if not l_fastload_enabled or not is_from_loader then
+		game:GetService("Players").LocalPlayer:Kick("[Luarmor]: Use the loadstring, do not run this directly")
+		wait(5)
+
+		while true do
+		end
+	end
+end
+
+local str = "?"
+loadstring = ce_like_loadstring_fn or loadstring
+-- ============================================================
+-- END SECURITY RESEARCH: Runtime / Loader validation
+-- Original source lines: 9-20 remain unchanged above.
+-- ============================================================
+local flag = false
+
+pcall(function()
+	flag = true
+	local UserGameSettings = UserSettings():GetService("UserGameSettings")
+
+	if not UserGameSettings:GetTutorialState("nil  nil  ") then
+		str = ""
+		local n = ({ wait() })[1] * 1000000
+
+		local function fn(arg)
+			local n2 = 1103515245
+			local n3 = 12345
+			local n4 = 99999999
+			local n5 = arg % 2147483648
+			local n6 = 1
+
+			return function(arg2, arg3)
+				local v2 = n4
+				local n7 = n2 * n5 + n3
+				local n8 = n7 % v2 + n6
+				n6 += 1
+				n5 = n8
+				n3 = n7 % 4858 * v2 % 5782
+				return arg2 + n8 % arg3 - arg2 + 1
+			end
+		end
+
+		local v2 = fn(n - n % 1)
+		UserGameSettings:SetTutorialState("nil  nil  ", true)
+		local n2 = 0
+
+		for i = 1, 16 do
+			local n3 = 0
+			local n4 = 1
+
+			for i2 = 1, 5 do
+				local flag2 = v2(10, 20) > 15
+				UserGameSettings:SetTutorialState("nil  nil  " .. n2, flag2)
+				n3 += (flag2 and 1 or 0) * n4
+				n4 *= 2
+				n2 += 1
+			end
+
+			str ..= ("qwertyuiopasdfghjklzxcvbnm098765"):sub(n3 + 1, n3 + 1)
+		end
+	else
+		str = ""
+		local n = 0
+
+		for i = 1, 16 do
+			local n2 = 0
+			local n3 = 1
+
+			for i2 = 1, 5 do
+				n2 += (UserGameSettings:GetTutorialState("nil  nil  " .. n) and 1 or 0) * n3
+				n3 *= 2
+				n += 1
+			end
+
+			str ..= ("qwertyuiopasdfghjklzxcvbnm098765"):sub(n2 + 1, n2 + 1)
+		end
+	end
+end)
+
+while not flag do
+end
+
+local now = os.clock()
+
+-- ============================================================
+-- SECURITY RESEARCH: Luarmor signature / runtime metadata
+-- Original source lines: 91-95
+-- Purpose: identify the security-relevant boundary for study.
+-- Defensive note: authorization should be enforced server-side;
+-- client-side checks/obfuscation should not be treated as a trust boundary.
+-- ============================================================
+if devsignature_sig then
+	print([[        Luarmor - Lua whitelist service
+        This is a signature - If you are seeing this, you know what not to do :3
+        Have a good day!
+        https://luarmor.net/
+-- ============================================================
+-- END SECURITY RESEARCH: Luarmor signature / runtime metadata
+-- Original source lines: 91-95 remain unchanged above.
+-- ============================================================
+    ]])
+end
+
 local flag2 = nil
 local flag3 = nil
 local v2 = ({ table.unpack(v, 1, v.n) })[3]
@@ -74,6 +214,13 @@ local function fn2(arg, arg2)
 	return arg2
 end
 
+-- ============================================================
+-- SECURITY RESEARCH: Luarmor runtime flags related to validation behavior
+-- Original source lines: 175-181
+-- Purpose: identify the security-relevant boundary for study.
+-- Defensive note: authorization should be enforced server-side;
+-- client-side checks/obfuscation should not be treated as a trust boundary.
+-- ============================================================
 local v5 = LUARMOR_SkipAntidebugDevMode
 local v6 = LUARMOR_AllowKeyCheckSkip
 local flag4 = ff97f23b97f93792992999 and ff97f23b97f93792992999() == v4[fn2("\172", 31126577901884)] or false
@@ -81,6 +228,10 @@ local v7 = v4[fn2("6\143K\188=\r\226\146\248&\176;\3\231Æ\133\143\248\204_\184\
 local v8 = USE_NON_SSL_NODE
 local v9 = l_fastload_enabled
 local n3 = os[v4[fn2("(\204\6\168", 4882453074371)]](os[v4[fn2("UC\178}", 12971197083440)]](v4[fn2("\139L", 33012126087192)])) - os[v4[fn2("vܢ\204", 5436520764359)]](os[v4[fn2("f\150\187#", 4318721413046)]](v4[fn2("\209\6D", 24300592814183)]))
+-- ============================================================
+-- END SECURITY RESEARCH: Luarmor runtime flags related to validation behavior
+-- Original source lines: 175-181 remain unchanged above.
+-- ============================================================
 local n4
 
 if n3 < 0 then
@@ -91,6 +242,13 @@ end
 
 local n5 = n4 / 3600
 
+-- ============================================================
+-- SECURITY RESEARCH: Time-based runtime behavior / gate
+-- Original source lines: 192-234
+-- Purpose: identify the security-relevant boundary for study.
+-- Defensive note: authorization should be enforced server-side;
+-- client-side checks/obfuscation should not be treated as a trust boundary.
+-- ============================================================
 if n5 >= 21 or n5 < 5 then
 	local tbl5 = {}
 	local v10 = v4[fn2("\226XO\140q\210K\180:%\205B\254\182.y\229\163\245\219v$\209Y\171\6f", 3448963992716)]
@@ -134,8 +292,19 @@ elseif n5 >= 15 and n5 < 21 then
 	v7 = tbl5[math[v4[fn2("\237\238q\243\0025", 446690230688)]](1, 2)]
 else
 	game:GetService(v4[fn2("\11\19\5\4\2527\137", 10601376556689)])[v4[fn2("6\164p?\177pjs'\184]", 30941888671888)]]:Kick(v4[fn2("XЀ\129\142\231\6\145\130ښz\231[\253\250\28A\140`;m\\\243C\167d_\8뵟\11\24\4̩\172S\rH\235-E\0079\1519lH\149-C3\130)\225\20\162{1\228ܞ", 31900769383437)])
+-- ============================================================
+-- END SECURITY RESEARCH: Time-based runtime behavior / gate
+-- Original source lines: 192-234 remain unchanged above.
+-- ============================================================
 end
 
+-- ============================================================
+-- SECURITY RESEARCH: Country / region environment check
+-- Original source lines: 237-250
+-- Purpose: identify the security-relevant boundary for study.
+-- Defensive note: authorization should be enforced server-side;
+-- client-side checks/obfuscation should not be treated as a trust boundary.
+-- ============================================================
 pcall(function()
 	if game:GetService(v4[fn2("Y4\161\128j\n\206\18\4\2551z\235۾\220\26C\148", 26759536632153)]):GetCountryRegionForPlayerAsync(game:GetService(v4[fn2("A\209q\131\160\177\219", 8137063865754)])[v4[fn2("\255\189\244ˢ\218K\216I\131\254", 24768758536731)]]) == v4[fn2(";%", 6519959328696)] then
 		local tbl5 = {}
@@ -150,9 +319,20 @@ pcall(function()
 		tbl5[4] = v13
 		tbl5[5] = v14
 		v7 = tbl5[math[v4[fn2("\182\163/Pv\178", 434878710165)]](1, 5)]
+-- ============================================================
+-- END SECURITY RESEARCH: Country / region environment check
+-- Original source lines: 237-250 remain unchanged above.
+-- ============================================================
 	end
 end)
 
+-- ============================================================
+-- SECURITY RESEARCH: Request metadata / runtime flags
+-- Original source lines: 254-265
+-- Purpose: identify the security-relevant boundary for study.
+-- Defensive note: authorization should be enforced server-side;
+-- client-side checks/obfuscation should not be treated as a trust boundary.
+-- ============================================================
 local tbl5 = { [v4[fn2("$GBp\229(\220", 25758778711477)]] = v4[fn2("\233\191\12", 22757578724042)] }
 tbl5[v4[fn2("\168)[\4", 30887126167645)]] = flag4 and LT_R_RRT_H or v4[fn2("\145\199\235ښ\255A\27", 5940121048476)] .. v7
 tbl5[v4[fn2("-\187\163M\25\167\217@", 4026654723750)]] = "6c72b2521481b15e56173fbfa2baa959"
@@ -165,6 +345,10 @@ if v8 then
 end
 
 local flag5 = type(({ table.unpack(v, 1, v.n) })[1]) ~= v4[fn2("\242\19\150\29>", 10561646896748)]
+-- ============================================================
+-- END SECURITY RESEARCH: Request metadata / runtime flags
+-- Original source lines: 254-265 remain unchanged above.
+-- ============================================================
 local flag6 = false
 local fn3 = nil
 local n6 = nil
@@ -175,6 +359,13 @@ local v10 = nil
 local tbl8 = nil
 local v11 = print
 local v12 = next
+-- ============================================================
+-- SECURITY RESEARCH: Executor / environment API detection
+-- Original source lines: 276-300
+-- Purpose: identify the security-relevant boundary for study.
+-- Defensive note: authorization should be enforced server-side;
+-- client-side checks/obfuscation should not be treated as a trust boundary.
+-- ============================================================
 local v13 = string[v4[fn2("2\2521\5", 29730670930984)]]
 local v14 = identifyexecutor
 local v15 = game
@@ -200,14 +391,36 @@ local v34 = pairs
 local v35 = string[v4[fn2("\3\155\250\194", 32580468700806)]]
 local v36 = getgenv
 local flag8 = false
+-- ============================================================
+-- END SECURITY RESEARCH: Executor / environment API detection
+-- Original source lines: 276-300 remain unchanged above.
+-- ============================================================
 
+-- ============================================================
+-- SECURITY RESEARCH: Dynamic execution of decrypted data
+-- Original source lines: 302-305
+-- Purpose: identify the security-relevant boundary for study.
+-- Defensive note: authorization should be enforced server-side;
+-- client-side checks/obfuscation should not be treated as a trust boundary.
+-- ============================================================
 local function fn4(arg, arg2)
 	v24(v4[fn2("i\154\24+|X6!\178ڻ\204ηA\11\7\248<\206\28\245\222c\174\5\23\227\240?Iz\250a4S.\240\147t\199\0065\4\145\11\239\203\2.\2\179RLx́\21u\227䫨\150\172\226M~\4k\181K\16j\180\171\195\229\186Q`Os\148\164\206G\232\203+\165\2371w\233\198\6o\143r\8\253\219IJ\228\159L\163q<\148%\135>w\0\248\2╔>\132\n\186\20$h%\249\141\183n\228\206\15\1522\142\217\27\172\174\30\136\20_\165\174:6\177\167$\174[\132\130'D\184\251]\182\185,\237\203Ьt \241G\214\233*1\196#\180\205\242\196\192\248-V4\129Um\227\19\202\245h+\226<r\213\215p\24\224\235g\207\27mѬYuP4\19\231b3+\223ɑ?ս\251\244k\136\26\198\23\163@<\31M%\14\12\166FˆǼw]\187Sc\223r[\148T\191\183\179\179Q\11\208@\141w\205Ѫ>\171\u{557}\18\212\24-Lu\246ƾYo\236\4\254\11\234o\250\253\236\rZ\149\154I/\205H\181&\200:\227j\n\197\16\143\225\217\27\183\"\153\144\227\nW\254\\\180@\251\132\127b\128\174a\29\158\184\185,\19\187\178\242\247p\132i", 26167886831410)])(arg, arg2)
 
 	while v22() do
+-- ============================================================
+-- END SECURITY RESEARCH: Dynamic execution of decrypted data
+-- Original source lines: 302-305 remain unchanged above.
+-- ============================================================
 	end
 end
 
+-- ============================================================
+-- SECURITY RESEARCH: Network / WebSocket / request layer
+-- Original source lines: 309-636
+-- Purpose: identify the security-relevant boundary for study.
+-- Defensive note: authorization should be enforced server-side;
+-- client-side checks/obfuscation should not be treated as a trust boundary.
+-- ============================================================
 local tbl9 = {}
 local flag9 = false
 local v37 = string[v4[fn2("\189[J\156\131h", 30415739121318)]]
@@ -536,6 +749,10 @@ tbl9.request = function(arg, arg2)
 	local v48 = v46[v4[fn2("6y\14\152\246", 14892179830317)]]
 	flag10 = true
 	return (v48:Wait())
+-- ============================================================
+-- END SECURITY RESEARCH: Network / WebSocket / request layer
+-- Original source lines: 309-636 remain unchanged above.
+-- ============================================================
 end
 
 tbl9.close = function(arg)
@@ -543,6 +760,13 @@ tbl9.close = function(arg)
 	arg[v4[fn2("\248Ot\178\26\"\163W\188", 11388453333358)]]:Close()
 end
 
+-- ============================================================
+-- SECURITY RESEARCH: License / script_key input and validation flow
+-- Original source lines: 644-657
+-- Purpose: identify the security-relevant boundary for study.
+-- Defensive note: authorization should be enforced server-side;
+-- client-side checks/obfuscation should not be treated as a trust boundary.
+-- ============================================================
 local v44 = script_key or v4[fn2("O8\150\147", 28215574980261)]
 local n7 = 0
 local flag10 = false
@@ -557,6 +781,10 @@ v28(function()
 end)
 
 while not flag10 do
+-- ============================================================
+-- END SECURITY RESEARCH: License / script_key input and validation flow
+-- Original source lines: 644-657 remain unchanged above.
+-- ============================================================
 	v29:Wait()
 end
 
@@ -607,6 +835,13 @@ local function fn10(arg)
 	return arg
 end
 
+-- ============================================================
+-- SECURITY RESEARCH: Executor identification / environment detection
+-- Original source lines: 708-741
+-- Purpose: identify the security-relevant boundary for study.
+-- Defensive note: authorization should be enforced server-side;
+-- client-side checks/obfuscation should not be treated as a trust boundary.
+-- ============================================================
 local n8 = 1
 local v45 = syn and syn[v4[fn2("D\180\156f\239S\239", 24172813637616)]] or request or http_request
 
@@ -641,6 +876,10 @@ elseif v14 and ({ v14() })[1] == v4[fn2("h\16\196\"\236", 28973659842919)] then
 end
 
 if v14() == v4[fn2("\236<\200I", 5129421230761)] then
+-- ============================================================
+-- END SECURITY RESEARCH: Executor identification / environment detection
+-- Original source lines: 708-741 remain unchanged above.
+-- ============================================================
 	n8 = 11
 end
 
@@ -748,6 +987,13 @@ local function fn13(arg)
 	return arg
 end
 
+-- ============================================================
+-- SECURITY RESEARCH: Runtime / UI initialization and callback flow
+-- Original source lines: 849-967
+-- Purpose: identify the security-relevant boundary for study.
+-- Defensive note: authorization should be enforced server-side;
+-- client-side checks/obfuscation should not be treated as a trust boundary.
+-- ============================================================
 local fn14
 
 if v3 then
@@ -867,6 +1113,10 @@ else
 end
 
 fn14(60, v4[fn2("*", 18734145324071)], v4[fn2("\221\232\7\215\12\156WP\246\153@4=\31", 22257199763704)])
+-- ============================================================
+-- END SECURITY RESEARCH: Runtime / UI initialization and callback flow
+-- Original source lines: 849-967 remain unchanged above.
+-- ============================================================
 
 local function fn15(arg)
 	local tbl11 = {}
@@ -17088,4 +17338,4 @@ while true do
 	end
 end
 
-
+fn14(100, v4[fn2("n\218\192\176\129w\151\190\193\1756", 21845944094585)], v4[fn2("-\209 \r\161\128\30\181)\162\169\194\240\156\19Ȣs\0212\188p\207(\188\240\176\157\230\2\142\167\11\226\159&\233", 10693721171687)] .. v33(v64), Color3[v4[fn2("\211\207k", 18772801209419)]](1, 0, 0), v4[fn2(" `\4\162\157", 18561267614598)])
